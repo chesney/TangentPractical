@@ -19,12 +19,10 @@
     <script src="Scripts/jquery-2.1.4.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
     <script>
-       // $(document).ready(function() {
+        $(document).ready(function() {
             var uri = 'api/generator';
 
-
-            function generateID() {
-                // Send an AJAX request
+            $('#generateMe').click(function(){
                 $.getJSON(uri)
                   .done(function (data) {
                       // On success, 'data' contains a list of products.
@@ -33,10 +31,9 @@
                           $('<p>', { text: formatItem(item) }).appendTo($('#newid'));
                       });
                   });
-            }
+            })
 
-
-            function ValidateID() {
+            $('#validateMe').click(function () {
                 // Send an AJAX request
                 var idnum = $('#idtovalidate').val();
                 $.post(uri + '/' + idnum)
@@ -48,13 +45,27 @@
                           $('<p>The ID Number ' + data.inputField + ' is valid.</p>').appendTo($('#validatedID'));
                       }
                   });
-            }
+            })
+            
+            /*function ValidateID() {
+                // Send an AJAX request
+                var idnum = $('#idtovalidate').val();
+                $.post(uri + '/' + idnum)
+                  .done(function (data) {
+                      if (data.validField == false) {
+                          $('<p>The ID Number ' + data.inputField + ' is invalid. Error message returned : ' + data.outputField.errorFlagsField + '</p>').appendTo($('#validatedID'));
+                      }
+                      else {
+                          $('<p>The ID Number ' + data.inputField + ' is valid.</p>').appendTo($('#validatedID'));
+                      }
+                  });
+            }*/
 
             function formatItem(item) {
                 return item.dob + item.gender + item.countryind + item.racialind + item.checkdigit;
             }
 
-//        });
+        });
     </script>
 </head>
 <body>
@@ -72,7 +83,7 @@
         <div class="col-md-8" style="background-color: #dedef8;
          box-shadow: inset 1px -1px 1px #FAFAFA, inset -1px 1px 1px #FAFAFA;min-height:53px;">
             <p>Click the button to generate a random South African ID number.</p>
-            <input type="button" value="Generate Random ID" onclick="generateID();" />
+            <input type="button" value="Generate Random ID" id="generateMe" />
         </div>
     </div><br>
     <div class="row">
@@ -82,7 +93,7 @@
          box-shadow: inset 1px -1px 1px #FAFAFA,
          inset -1px 1px 1px #FAFAFA;min-height:53px;">
             <input type="text" value=" " id="idtovalidate" />
-            <input type="button" value="Submit ID" onclick="ValidateID();" />
+            <input type="button" value="Submit ID" id="validateMe" />
         </div>
         <div class="col-md-8 col-md-pull-4"
              style="background-color: #dedef8;
