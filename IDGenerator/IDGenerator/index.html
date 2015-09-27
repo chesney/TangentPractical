@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Generate ID Number</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="Content/bootstrap.min.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media
+    queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page
+       via file:// -->
+    <!--[if lt IE 9]>
+       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/
+          html5shiv.js"></script>
+       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/
+          respond.min.js"></script>
+    <![endif]-->
+
+    <script src="Scripts/jquery-2.1.4.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script>
+       // $(document).ready(function() {
+            var uri = 'api/generator';
+
+
+            function generateID() {
+                // Send an AJAX request
+                $.getJSON(uri)
+                  .done(function (data) {
+                      // On success, 'data' contains a list of products.
+                      $.each(data, function (key, item) {
+                          // Add a list item for the product.
+                          $('<p>', { text: formatItem(item) }).appendTo($('#newid'));
+                      });
+                  });
+            }
+
+
+            function ValidateID() {
+                // Send an AJAX request
+                var idnum = $('#idtovalidate').val();
+                $.post(uri + '/' + idnum)
+                  .done(function (data) {
+                      if (data.validField == false) {
+                          $('<p>The ID Number ' + data.inputField + ' is invalid. Error message returned : ' + data.outputField.errorFlagsField + '</p>').appendTo($('#validatedID'));
+                      }
+                      else {
+                          $('<p>The ID Number ' + data.inputField + ' is valid.</p>').appendTo($('#validatedID'));
+                      }
+                  });
+            }
+
+            function formatItem(item) {
+                return item.dob + item.gender + item.countryind + item.racialind + item.checkdigit;
+            }
+
+//        });
+    </script>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Tangent Practical</h1>
+
+    <div class="row">
+        <h3>Generate New ID Number</h3>
+        <div class="col-md-4" style="background-color: #dedef8;
+         box-shadow: inset 1px -1px 1px #FAFAFA, inset -1px 1px 1px #FAFAFA;min-height:53px;">
+            <p id="newid" /></p>
+        </div>
+        <div class="col-md-8" style="background-color: #dedef8;
+         box-shadow: inset 1px -1px 1px #FAFAFA, inset -1px 1px 1px #FAFAFA;min-height:53px;">
+            <p>Click the button to generate a random South African ID number.</p>
+            <input type="button" value="Generate Random ID" onclick="generateID();" />
+        </div>
+    </div><br>
+    <div class="row">
+        <h3>Validate ID Number</h3>
+        <div class="col-md-4 col-md-push-8"
+             style="background-color: #dedef8;
+         box-shadow: inset 1px -1px 1px #FAFAFA,
+         inset -1px 1px 1px #FAFAFA;min-height:53px;">
+            <input type="text" value=" " id="idtovalidate" />
+            <input type="button" value="Submit ID" onclick="ValidateID();" />
+        </div>
+        <div class="col-md-8 col-md-pull-4"
+             style="background-color: #dedef8;
+         box-shadow: inset 1px -1px 1px #FAFAFA,
+         inset -1px 1px 1px #FAFAFA;min-height:53px;">
+            <p id="validatedID" />
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
